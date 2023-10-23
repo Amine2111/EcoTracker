@@ -8,11 +8,11 @@
   
   <script>
   export default {
-    name:'AboutUs',
+    name:'InscriptionPage',
     data() {
       return {
-        pageTitle: "À propos de nous",
-        pageContent: "We are a French team of two students who want to make the world a greener place! ^^",
+        pageTitle: "Inscription",
+        pageContent: "Sign in EcoTracker to have access to accurate carbon footprint calculating tools.",
       };
     },
   };

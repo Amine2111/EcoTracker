@@ -8,10 +8,11 @@
   
   <script>
   export default {
+    name:'CalculPage',
     data() {
       return {
         pageTitle: "Calcul",
-        pageContent: "Here, you can use our simulator to estimate your carbon footprint and find solutions to lower it!",
+        pageContent: "Here, you can use our simulator to estimate your carbon footprint while traveling and find solutions to lower it!",
       };
     },
   };

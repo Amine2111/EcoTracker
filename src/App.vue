@@ -1,15 +1,25 @@
+
+import InscriptionPage from './components/InscriptionPage.vue';
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <AboutUs></AboutUs>
+  <CalculPage></CalculPage>
+  <InscriptionPage></InscriptionPage>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AboutUs from './src/components/AboutUs.vue'
+import CalculPage from './components/CalculPage.vue'
+import InscriptionPage from './components/InscriptionPage.vue'
+
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    InscriptionPage,
+    AboutUs,
+    CalculPage
   }
 }
 </script>
