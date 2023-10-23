@@ -3,6 +3,7 @@
     <div>
       <h1>{{ pageTitle }}</h1>
       <p>{{ pageContent }}</p>
+      <GoogleLogin :callback="callback"/>
     </div>
   </template>
   
@@ -16,5 +17,10 @@
       };
     },
   };
+  </script>
+  <script setup>
+  const callback = (response) => {
+    console.log("Gérer la réponse", response);
+  }
   </script>
   
