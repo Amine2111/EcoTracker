@@ -7,7 +7,7 @@
   
   <script>
   export default {
-    name:'AboutUs',
+    name:'AboutUsPage',
     data() {
       return {
         pageTitle: "À propos de nous",

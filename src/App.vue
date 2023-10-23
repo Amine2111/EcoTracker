@@ -2,7 +2,7 @@
 import InscriptionPage from './components/InscriptionPage.vue';
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <AboutUs></AboutUs>
+  <AboutUsPage></AboutUsPage>
   <CalculPage></CalculPage>
   <InscriptionPage></InscriptionPage>
 </template>
@@ -10,14 +10,14 @@ import InscriptionPage from './components/InscriptionPage.vue';
 <script>
 import CalculPage from './components/CalculPage.vue'
 import InscriptionPage from './components/InscriptionPage.vue'
-import AboutUs from './components/AboutUs.vue'
+import AboutUsPage from './components/AboutUsPage.vue'
 
 
 export default {
   name: 'App',
   components: {
     InscriptionPage,
-    AboutUs,
+    AboutUsPage,
     CalculPage
   }
 }
