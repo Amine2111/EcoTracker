@@ -8,10 +8,9 @@ import InscriptionPage from './components/InscriptionPage.vue';
 </template>
 
 <script>
-import AboutUs from './src/components/AboutUs.vue'
 import CalculPage from './components/CalculPage.vue'
 import InscriptionPage from './components/InscriptionPage.vue'
-
+import AboutUs from './components/AboutUs.vue'
 
 
 export default {
