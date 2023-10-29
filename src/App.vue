@@ -1,10 +1,11 @@
 
-import InscriptionPage from './components/InscriptionPage.vue';
+
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <AboutUsPage></AboutUsPage>
-  <CalculPage></CalculPage>
-  <InscriptionPage></InscriptionPage>
+  <router-view></router-view>
+  <AboutUsPage>AboutuS </AboutUsPage>
+  <CalculPage>Calculate Here</CalculPage>
+  <InscriptionPage>Sign Up</InscriptionPage>
 </template>
 
 <script>

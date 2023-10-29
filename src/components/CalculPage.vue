@@ -37,6 +37,13 @@
         <p>CO2e: {{ CO2Data.indirect_emissions.co2e }} {{ CO2Data.indirect_emissions.co2e_unit }}</p>
         </div>
       </div>
+      <div>
+      <nav>
+      <router-link to="/about">About Us</router-link>
+      <router-link to="/calcul">Calculator</router-link>
+      <router-link to="/inscription">Sign Up</router-link>
+      </nav>
+      </div>
     </div>
   </template>
   

@@ -5,6 +5,13 @@
       <p>{{ pageContent }}</p>
       <GoogleLogin :callback="callback"/>
     </div>
+    <div>
+      <nav>
+      <router-link to="/about">About Us</router-link>
+      <router-link to="/calcul">Calculator</router-link>
+      <router-link to="/inscription">Sign Up</router-link>
+      </nav>
+      </div>
   </template>
   
   <script>
