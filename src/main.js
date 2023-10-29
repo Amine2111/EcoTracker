@@ -14,5 +14,3 @@ app.use(vue3GoogleLogin, {
 });
 
 app.mount('#app');
-
-createApp(App).mount('#app')

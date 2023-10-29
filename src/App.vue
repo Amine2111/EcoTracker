@@ -1,5 +1,3 @@
-
-
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
   <router-view></router-view>
@@ -19,7 +17,7 @@ export default {
   components: {
     InscriptionPage,
     AboutUsPage,
-    CalculPage
+    CalculPage,
   }
 }
 </script>
