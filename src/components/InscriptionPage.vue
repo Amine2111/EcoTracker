@@ -19,6 +19,8 @@
       <button type="submit">Se connecter</button>
     </form>
 
+    <GoogleLogin :callback="onGoogleSignIn"/>
+
     <p v-if="isSignUp">
       Vous avez déjà un compte ? <a @click="toggleForm">Cliquez ici</a>
     </p>
