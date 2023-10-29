@@ -2,80 +2,46 @@
   <div id="app">
     <nav class="navbar">
       <img class="logo" alt="Vue logo" src="./assets/logo.png">
-      <router-view></router-view>
+      <router-link to="/about" class="nav-link">À Propos de Nous</router-link>
+      <router-link to="/calcul" class="nav-link">Calculateur</router-link>
+      <router-link to="/inscription" class="nav-link">Inscription</router-link>
     </nav>
-    <header class="header">
-      <h1>Bienvenue sur Notre Site</h1>
-      <p>Découvrez nos services et produits incroyables</p>
-    </header>
-    <section class="content">
-      <AboutUsPage class="section">À Propos de Nous</AboutUsPage>
-      <CalculPage class="section">Calculez Ici</CalculPage>
-      <InscriptionPage class="section">Inscrivez-vous</InscriptionPage>
-    </section>
-    <footer class="footer">
-      <p>© 2023 EcoTracker</p>
-    </footer>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import CalculPage from './components/CalculPage.vue'
-import InscriptionPage from './components/InscriptionPage.vue'
-import AboutUsPage from './components/AboutUsPage.vue'
-
 export default {
   name: 'App',
-  components: {
-    InscriptionPage,
-    AboutUsPage,
-    CalculPage,
-  }
 }
 </script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
   color: #2c3e50;
 }
 
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #333;
+  padding: 10px 50px;
+  background-color: #2c3e50;
 }
 
 .logo {
-  width: 100px;
-  height: 100px;
-  margin-right: 20px;
+  height: 40px;
 }
 
-.header {
-  text-align: center;
-  padding: 50px 20px;
-  background-color: #eee;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.section {
-  margin: 10px 0;
-}
-
-.footer {
-  padding: 10px 20px;
-  background-color: #333;
+.nav-link {
   color: #fff;
-  text-align: center;
+  text-decoration: none;
+  padding: 0 10px;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }
 </style>
