@@ -3,7 +3,7 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
   <router-view></router-view>
-  <AboutUsPage>AboutUs </AboutUsPage>
+  <AboutUsPage>AboutuS </AboutUsPage>
   <CalculPage>Calculate Here</CalculPage>
   <InscriptionPage>Sign Up</InscriptionPage>
 </template>

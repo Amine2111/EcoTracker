@@ -37,9 +37,10 @@
         <p>CO2e: {{ CO2Data.indirect_emissions.co2e }} {{ CO2Data.indirect_emissions.co2e_unit }}</p>
         </div>
       </div>
-      <div class="routes">
+      <div>
       <nav>
       <router-link to="/about">About Us</router-link>
+      <router-link to="/calcul">Calculator</router-link>
       <router-link to="/inscription">Sign Up</router-link>
       </nav>
       </div>
@@ -47,50 +48,48 @@
   </template>
   
   <script>
-export default {
-  name: 'CalculPage',
-  data() {
-    return {
-      pageTitle: 'Calcul',
-      pageContent: 'Here, you can use our simulator to estimate your carbon footprint while traveling and find solutions to lower it!',
-      travelMode: 'car',
-      origin: '',
-      destination: '',
-      CO2Data: null,
-    };
-  },
-  methods: {
-    fetchCO2Data() {
+  export default {
+    name:'CalculPage',
+    data() {
+      return {
+        pageTitle: 'Calcul',
+        pageContent: 'Here, you can use our simulator to estimate your carbon footprint while traveling and find solutions to lower it!',
+        travelMode: 'car', 
+        origin: '',
+        destination: '',
+      };
+    },
+    created(){
       const apiKey = 'MQEV5AP5QN4K0WH7D04YT3SWVEFD';
-      const apiUrl = 'https://beta4.api.climatiq.io/travel/distance';
+      const apiUrl = 'https://beta4.api.climatiq.io/travel/distance'; this.fetchCO2Data();
       
       const requestData = {
         travel_mode: this.travelMode,
-        origin: {
-          query: this.origin,
-        },
-        destination: {
-          query: this.destination,
-        },
-      };
+      origin: {
+        query: this.origin,
+      },
+      destination: {
+        query: this.destination,
+      },
+    };
 
       fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-      .then(response => response.json())
-      .then(data => {
-        this.CO2Data = data;
+      },
+      body: JSON.stringify(requestData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Traitment des data
         console.log(data);
       })
       .catch(error => {
         console.error('Une erreur s\'est produite :', error);
       });
-    },
-  },
-};
-</script>
+    }
+  };
+  </script>
+  

@@ -5,17 +5,16 @@
       <p>{{ pageContent }}</p>
       <GoogleLogin :callback="callback"/>
     </div>
-    <div class="routes">
+    <div>
       <nav>
       <router-link to="/about">About Us</router-link>
       <router-link to="/calcul">Calculator</router-link>
+      <router-link to="/inscription">Sign Up</router-link>
       </nav>
       </div>
   </template>
   
   <script>
-  import { RouterLink } from 'vue-router'
-
   export default {
     name:'InscriptionPage',
     data() {

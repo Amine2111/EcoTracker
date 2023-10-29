@@ -3,17 +3,9 @@
       <h1>{{ pageTitle }}</h1>
       <p>{{ pageContent }}</p>
     </div>
-    <div class="routes">
-      <nav>
-      <router-link to="/calcul">Calculator</router-link>
-      <router-link to="/inscription">Sign Up</router-link>
-    </nav>
-    </div>
   </template>
   
   <script>
-  
-
   export default {
     name:'AboutUsPage',
     data() {
