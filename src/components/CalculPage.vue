@@ -11,6 +11,9 @@
         <li v-for="(leg, index) in CO2Data.legs" :key="index">
           <p>Leg {{ index + 1 }} : {{ leg.co2e }} {{ leg.co2e_unit }}</p>
         </li>
+        <li v-for="(wttLeg, index) in CO2Data.wtt_legs" :key="index">
+        <p>WTT Leg {{ index + 1 }} - CO2e: {{ wttLeg.co2e }} {{ wttLeg.co2e_unit }}</p>
+      </li>
       </ul>
     </div>
     <form @submit.prevent="calculateCO2">
@@ -28,29 +31,30 @@
       <select v-model="flightClass" id="flightClass">
         <option value="first">Première classe</option>
         <option value="economy">Économie</option>
-
-      <!-- Ajouter d'autres champs si nécessaire -->
       </select>
-
+      <button type="button" @click="validateLeg">Valider</button>
       <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
       <button type="button" @click="showNewLegForm = !showNewLegForm">Ajouter une étape</button>
-      <button type="button" @click="validateLeg">Valider</button>
+      
 
       <!-- Afficher le formulaire d'ajout de vol uniquement si le bouton ajouterLeg est cliqué -->
       <div v-if="showNewLegForm">
-        <label for="newOrigin">Origine :</label>
-        <input v-model="newLeg.from" id="newOrigin" type="text" required />
-        <label for="newDestination">Destination :</label>
-        <input v-model="newLeg.to" id="newDestination" type="text" required />
-        <label for="newPassengers">Nombre de passagers :</label>
-        <input v-model="newLeg.passengers" id="newPassengers" type="number" required />
-        <label for="newFlightClass">Classe de vol :</label>
-        <select v-model="newLeg.class" id="newFlightClass">
-          <option value="first">Première classe</option>
-          <option value="economy">Économie</option>
+        <label for="origin">Origine :</label>
+      <input v-model="origin" id="origin" type="text" required />
+      
+      <label for="destination">Destination :</label>
+      <input v-model="destination" id="destination" type="text" required />
+      
+      <label for="passengers">Nombre de passagers :</label>
+      <input v-model="passengers" id="passengers" type="number" required />
+
+      <label for="flightClass">Classe de vol :</label>
+      <select v-model="flightClass" id="flightClass">
+        <option value="first">Première classe</option>
+        <option value="economy">Économie</option>
         </select>
+        
         <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
-        <button type="button" @click="validateLeg">Valider</button>
       
 
       </div>
@@ -119,12 +123,14 @@ export default {
   
     validateLeg() {
       this.newLeg.from = this.origin;
-    this.newLeg.to = this.destination;
-    this.newLeg.passengers = this.passengers;
-    this.newLeg.class = this.flightClass;
+      this.newLeg.to = this.destination;
+      this.newLeg.passengers = this.passengers;
+      this.newLeg.class = this.flightClass;
+      console.log(this.newLeg);
       this.flightLegs.push({ ...this.newLeg }); // Ajoute la ligne actuelle à flightLegs
       console.log('Validé');
       console.log(this.flightLegs);
+      this.newleg = [];
     },
     removeFlightLeg(index) {
       this.flightLegs.splice(index, 1);
