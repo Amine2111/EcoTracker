@@ -32,8 +32,12 @@
       <!-- Ajouter d'autres champs si nécessaire -->
       </select>
 
-      <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
-      <button type="button" @click="addFlightLeg">Ajouter une étape</button>
+      <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
+      <button type="button" @click="showNewLegForm = !showNewLegForm">Ajouter une étape</button>
+      <button type="button" @click="validateLeg">Valider</button>
+
+      <!--affichage de base-->
+
       <div v-for="(flightLeg, index) in flightLegs" :key="index">
         <label for="legOrigin">Origine :</label>
         <input v-model="flightLeg.from" id="legOrigin" type="text" required />
@@ -46,8 +50,29 @@
           <option value="first">Première classe</option>
           <option value="economy">Économie</option>
         </select>
-        <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
+        <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
       </div>
+
+      <!-- Afficher le formulaire d'ajout de vol uniquement si le bouton ajouterLeg est cliqué -->
+      <div v-if="showNewLegForm">
+        <label for="newOrigin">Origine :</label>
+        <input v-model="newLeg.from" id="newOrigin" type="text" required />
+        <label for="newDestination">Destination :</label>
+        <input v-model="newLeg.to" id="newDestination" type="text" required />
+        <label for="newPassengers">Nombre de passagers :</label>
+        <input v-model="newLeg.passengers" id="newPassengers" type="number" required />
+        <label for="newFlightClass">Classe de vol :</label>
+        <select v-model="newLeg.class" id="newFlightClass">
+          <option value="first">Première classe</option>
+          <option value="economy">Économie</option>
+        </select>
+        <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
+        <button type="button" @click="validateLeg">Valider</button>
+      
+
+      </div>
+
+
       <button type="submit">Calculer le CO2</button>
     </form>
   </div>
@@ -61,9 +86,15 @@ export default {
       pageTitle: 'Calculateur d\'Empreinte Carbone',
       pageContent: 'Utilisez notre simulateur pour estimer votre empreinte carbone lors de vos déplacements et trouvez des solutions pour la réduire !',
 
-      origin: '',
-      destination: '',
-      passengers: '',
+      showNewLegForm: false,
+
+      newLeg: {
+        from: '',
+        to: '',
+        passengers: 1,
+        class: 'unknown',
+      },
+
       flightLegs: [],
       CO2Data: null,
       error: null,
@@ -72,6 +103,7 @@ export default {
   methods: {
     async calculateCO2() {
       this.error = null; // Réinitialiser l'erreur à chaque nouvelle tentative
+
       try {
         const apiKey = 'JS28545H3S4GCGGRN05CXRZGEF20';
         const apiUrl = 'https://beta4.api.climatiq.io/travel/flights'; 
@@ -101,20 +133,17 @@ export default {
         this.error = 'Une erreur est survenue. Veuillez réessayer.';
       }
     },
-    addFlightLeg() {
-      this.flightLegs.push({
-        from: '',
-        to: '',
-        passengers: 1,
-        class: 'unknown',
-      });
+
+    validateLeg() {
+      this.flightLegs.push({ ...this.newLeg }); // Ajoute la ligne actuelle à flightLegs
+      console.log('Validé');
+      console.log(this.flightLegs);
     },
     removeFlightLeg(index) {
       this.flightLegs.splice(index, 1);
     }
-  }
 }
-
+}
 </script>
 
 <style scoped>
