@@ -36,23 +36,6 @@
       <button type="button" @click="showNewLegForm = !showNewLegForm">Ajouter une étape</button>
       <button type="button" @click="validateLeg">Valider</button>
 
-      <!--affichage de base-->
-
-      <div v-for="(flightLeg, index) in flightLegs" :key="index">
-        <label for="legOrigin">Origine :</label>
-        <input v-model="flightLeg.from" id="legOrigin" type="text" required />
-        <label for="legDestination">Destination :</label>
-        <input v-model="flightLeg.to" id="legDestination" type="text" required />
-        <label for="legPassengers">Nombre de passagers :</label>
-        <input v-model="flightLeg.passengers" id="legPassengers" type="number" required />
-        <label for="legClass">Classe de vol :</label>
-        <select v-model="flightLeg.class" id="legClass">
-          <option value="first">Première classe</option>
-          <option value="economy">Économie</option>
-        </select>
-        <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
-      </div>
-
       <!-- Afficher le formulaire d'ajout de vol uniquement si le bouton ajouterLeg est cliqué -->
       <div v-if="showNewLegForm">
         <label for="newOrigin">Origine :</label>
@@ -133,8 +116,12 @@ export default {
         this.error = 'Une erreur est survenue. Veuillez réessayer.';
       }
     },
-
+  
     validateLeg() {
+      this.newLeg.from = this.origin;
+    this.newLeg.to = this.destination;
+    this.newLeg.passengers = this.passengers;
+    this.newLeg.class = this.flightClass;
       this.flightLegs.push({ ...this.newLeg }); // Ajoute la ligne actuelle à flightLegs
       console.log('Validé');
       console.log(this.flightLegs);
