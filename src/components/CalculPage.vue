@@ -4,25 +4,16 @@
     <p>{{ pageContent }}</p>
     <div v-if="error" class="error">{{ error }}</div>
     <div v-if="CO2Data">
-      <h2>Votre émission de CO2 pour ce voyage</h2>
-      <p>Vous avez produit : {{ CO2Data.co2e }} {{ CO2Data.co2e_unit }}</p>
-      <p>Distance (km): {{ CO2Data.distance_km }}</p>
-      <p>Origine: {{ CO2Data.origin.name }}</p>
-      <p>Destination: {{ CO2Data.destination.name }}</p>
-      
-      <h3>Émissions directes de votre voyage</h3>
-      <p>CO2e: {{ CO2Data.direct_emissions.co2e }} {{ CO2Data.direct_emissions.co2e_unit }}</p>
-      
-      <h3>Émissions indirectes de votre voyage</h3>
-      <p>CO2e: {{ CO2Data.indirect_emissions.co2e }} {{ CO2Data.indirect_emissions.co2e_unit }}</p>
+      <h2>Résultats de calcul d'empreinte carbone</h2>
+      <p>Émissions totales : {{ CO2Data.co2e }} {{ CO2Data.co2e_unit }}</p>
+      <h3>Émissions par trajet :</h3>
+      <ul>
+        <li v-for="(leg, index) in CO2Data.legs" :key="index">
+          <p>Leg {{ index + 1 }} : {{ leg.co2e }} {{ leg.co2e_unit }}</p>
+        </li>
+      </ul>
     </div>
     <form @submit.prevent="calculateCO2">
-      <label for="travelMode">Mode de transport :</label>
-      <select v-model="travelMode" id="travelMode">
-        <option value="car">Voiture</option>
-        <option value="air">Avion</option>
-        <option value="rail">Train</option>
-      </select>
       
       <label for="origin">Origine :</label>
       <input v-model="origin" id="origin" type="text" required />
@@ -30,8 +21,33 @@
       <label for="destination">Destination :</label>
       <input v-model="destination" id="destination" type="text" required />
       
-      <!-- Ajoutez d'autres champs si nécessaire -->
-      
+      <label for="passengers">Nombre de passagers :</label>
+      <input v-model="passengers" id="passengers" type="number" required />
+
+      <label for="flightClass">Classe de vol :</label>
+      <select v-model="flightClass" id="flightClass">
+        <option value="first">Première classe</option>
+        <option value="economy">Économie</option>
+
+      <!-- Ajouter d'autres champs si nécessaire -->
+      </select>
+
+      <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
+      <button type="button" @click="addFlightLeg">Ajouter une étape</button>
+      <div v-for="(flightLeg, index) in flightLegs" :key="index">
+        <label for="legOrigin">Origine :</label>
+        <input v-model="flightLeg.from" id="legOrigin" type="text" required />
+        <label for="legDestination">Destination :</label>
+        <input v-model="flightLeg.to" id="legDestination" type="text" required />
+        <label for="legPassengers">Nombre de passagers :</label>
+        <input v-model="flightLeg.passengers" id="legPassengers" type="number" required />
+        <label for="legClass">Classe de vol :</label>
+        <select v-model="flightLeg.class" id="legClass">
+          <option value="first">Première classe</option>
+          <option value="economy">Économie</option>
+        </select>
+        <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
+      </div>
       <button type="submit">Calculer le CO2</button>
     </form>
   </div>
@@ -44,9 +60,11 @@ export default {
     return {
       pageTitle: 'Calculateur d\'Empreinte Carbone',
       pageContent: 'Utilisez notre simulateur pour estimer votre empreinte carbone lors de vos déplacements et trouvez des solutions pour la réduire !',
-      travelMode: 'car', 
+
       origin: '',
       destination: '',
+      passengers: '',
+      flightLegs: [],
       CO2Data: null,
       error: null,
     };
@@ -55,19 +73,13 @@ export default {
     async calculateCO2() {
       this.error = null; // Réinitialiser l'erreur à chaque nouvelle tentative
       try {
-        const apiKey = 'MQEV5AP5QN4K0WH7D04YT3SWVEFD';
-        const apiUrl = 'https://beta4.api.climatiq.io/travel/distance'; 
+        const apiKey = 'JS28545H3S4GCGGRN05CXRZGEF20';
+        const apiUrl = 'https://beta4.api.climatiq.io/travel/flights'; 
 
         const requestData = {
-          travel_mode: this.travelMode,
-          origin: {
-            query: this.origin,
-          },
-          destination: {
-            query: this.destination,
-          },
+          legs: this.flightLegs,
         };
-
+        
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
@@ -88,9 +100,21 @@ export default {
         console.error('Une erreur est survenue lors du calcul de l\'empreinte carbone:', error);
         this.error = 'Une erreur est survenue. Veuillez réessayer.';
       }
+    },
+    addFlightLeg() {
+      this.flightLegs.push({
+        from: '',
+        to: '',
+        passengers: 1,
+        class: 'unknown',
+      });
+    },
+    removeFlightLeg(index) {
+      this.flightLegs.splice(index, 1);
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
