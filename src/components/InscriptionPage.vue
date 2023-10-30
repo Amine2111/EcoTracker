@@ -32,6 +32,7 @@
 
 <script>
 export default {
+  
   data() {
     return {
       isSignUp: true,
@@ -42,14 +43,21 @@ export default {
       this.isSignUp = !this.isSignUp;
     },
     submitForm() {
-      if (this.isSignUp) {
-        console.log('Soumission du formulaire d\'inscription');
-      } else {
-        console.log('Soumission du formulaire de connexion');
-      }
-    },
+    if (this.isSignUp) {
+      console.log('Soumission du formulaire d\'inscription');
+      this.$store.dispatch('signIn', { firstName: 'Prénom', lastName: 'Nom' });
+    } else {
+      console.log('Soumission du formulaire de connexion');
+      this.$store.dispatch('signIn', { firstName: 'Prénom', lastName: 'Nom' });
+    }
   },
+  onGoogleSignIn(googleUser) {
+    const profile = googleUser.getBasicProfile();
+    this.$store.dispatch('signIn', { firstName: profile.getGivenName(), lastName: profile.getFamilyName() });
+  },
+},
 };
+
 </script>
 
 <style scoped>

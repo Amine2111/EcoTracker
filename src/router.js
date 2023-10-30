@@ -7,7 +7,7 @@ import InscriptionPage from './components/InscriptionPage.vue';
 const routes = [
   { path: '/', redirect: '/inscription' }, 
   { path: '/about', component: AboutUsPage },
-  { path: '/calcul', component: CalculPage },
+  { path: '/calcul', name: 'Calcul', component: CalculPage },
   { path: '/inscription', component: InscriptionPage },
   {path: '/', name: 'Home', component: () => import('./components/HomePage.vue')
   },

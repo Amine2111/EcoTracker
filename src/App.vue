@@ -3,18 +3,31 @@
     <nav class="navbar">
       <img class="logo" alt="Vue logo" src="./assets/logo.png">
       <router-link to="/about" class="nav-link">À Propos de Nous</router-link>
-      <router-link to="/calcul" class="nav-link">Calculateur</router-link>
+      <router-link :to="{ name: 'Calcul' }">Calculateur</router-link>
       <router-link to="/inscription" class="nav-link">Inscription</router-link>
+      <router-link v-if="isAuthenticated" :to="{ name: 'Calcul' }" class="nav-link">{{ userName }}</router-link>
     </nav>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'App',
+  computed: {
+    ...mapGetters(['isAuthenticated', 'userName']),
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch('signOut');
+      this.$router.push('/connexion'); 
+    }
+  }
 }
 </script>
+
 
 <style>
 #app {
