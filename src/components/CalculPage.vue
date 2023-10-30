@@ -32,8 +32,9 @@
         <option value="first">Première classe</option>
         <option value="economy">Économie</option>
       </select>
-      <button type="button" @click="validateLeg">Valider</button>
+      
       <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
+      <button type="button" @click="validateLeg">Valider</button>
       <button type="button" @click="showNewLegForm = !showNewLegForm">Ajouter une étape</button>
       
 
