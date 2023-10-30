@@ -10,6 +10,7 @@
       <input type="email" placeholder="Email" required>
       <input type="password" placeholder="Mot de passe" required>
       <button type="submit">S'inscrire</button>
+      <GoogleLogin :callback="onGoogleSignIn"/>
     </form>
 
     <form @submit.prevent="submitForm" v-else>
@@ -17,9 +18,10 @@
       <input type="email" placeholder="Email" required>
       <input type="password" placeholder="Mot de passe" required>
       <button type="submit">Se connecter</button>
+      <GoogleLogin :callback="onGoogleSignIn"/>
     </form>
 
-    <GoogleLogin :callback="onGoogleSignIn"/>
+    
 
     <p v-if="isSignUp">
       Vous avez déjà un compte ? <a @click="toggleForm">Cliquez ici</a>
