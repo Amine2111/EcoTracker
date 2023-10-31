@@ -8,59 +8,35 @@
       <p>Émissions totales : {{ CO2Data.co2e }} {{ CO2Data.co2e_unit }}</p>
       <h3>Émissions par trajet :</h3>
       <ul>
-        <li v-for="(leg, index) in CO2Data.legs" :key="index">
+        <li v-for="(leg, index) in CO2Data.legs" :key="'co2-leg-' + index">
           <p>Leg {{ index + 1 }} : {{ leg.co2e }} {{ leg.co2e_unit }}</p>
-        </li>
-        <li v-for="(wttLeg, index) in CO2Data.wtt_legs" :key="index">
+          <li v-for="(wttLeg, index) in CO2Data.wtt_legs" :key="index">
         <p>WTT Leg {{ index + 1 }} - CO2e: {{ wttLeg.co2e }} {{ wttLeg.co2e_unit }}</p>
-      </li>
+        </li>
       </ul>
     </div>
+
     <form @submit.prevent="calculateCO2">
-      
-      <label for="origin">Origine :</label>
-      <input v-model="origin" id="origin" type="text" required />
-      
-      <label for="destination">Destination :</label>
-      <input v-model="destination" id="destination" type="text" required />
-      
-      <label for="passengers">Nombre de passagers :</label>
-      <input v-model="passengers" id="passengers" type="number" required />
-
-      <label for="flightClass">Classe de vol :</label>
-      <select v-model="flightClass" id="flightClass">
-        <option value="first">Première classe</option>
-        <option value="economy">Économie</option>
-      </select>
-      
-      <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
-      <button type="button" @click="validateLeg">Valider</button>
-      <button type="button" @click="showNewLegForm = !showNewLegForm">Ajouter une étape</button>
-      
-
-      <!-- Afficher le formulaire d'ajout de vol uniquement si le bouton ajouterLeg est cliqué -->
-      <div v-if="showNewLegForm">
-        <label for="origin">Origine :</label>
-      <input v-model="origin" id="origin" type="text" required />
-      
-      <label for="destination">Destination :</label>
-      <input v-model="destination" id="destination" type="text" required />
-      
-      <label for="passengers">Nombre de passagers :</label>
-      <input v-model="passengers" id="passengers" type="number" required />
-
-      <label for="flightClass">Classe de vol :</label>
-      <select v-model="flightClass" id="flightClass">
-        <option value="first">Première classe</option>
-        <option value="economy">Économie</option>
+      <div v-for="(leg, index) in flightLegs" :key="'leg-' + index">
+        <label :for="'origin-' + index">Origine :</label>
+        <input v-model="leg.origin" :id="'origin-' + index" type="text" required />
+        
+        <label :for="'destination-' + index">Destination :</label>
+        <input v-model="leg.destination" :id="'destination-' + index" type="text" required />
+        
+        <label :for="'passengers-' + index">Nombre de passagers :</label>
+        <input v-model.number="leg.passengers" :id="'passengers-' + index" type="number" required />
+        
+        <label :for="'flightClass-' + index">Classe de vol :</label>
+        <select v-model="leg.flightClass" :id="'flightClass-' + index">
+          <option value="first">Première classe</option>
+          <option value="economy">Économie</option>
         </select>
         
-        <button type="button" @click="removeFlightLeg()">Supprimer cette étape</button>
-      
-
+        <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
       </div>
-
-
+      
+      <button type="button" @click="addNewLeg">Ajouter une étape</button>
       <button type="submit">Calculer le CO2</button>
     </form>
   </div>
@@ -71,78 +47,80 @@ export default {
   name: 'CalculPage',
   data() {
     return {
-      pageTitle: 'Calculateur d\'Empreinte Carbone',
-      pageContent: 'Utilisez notre simulateur pour estimer votre empreinte carbone lors de vos déplacements et trouvez des solutions pour la réduire !',
-
-      showNewLegForm: false,
-
-      newLeg: {
-        from: '',
-        to: '',
+      pageTitle: "Calculateur d'Empreinte Carbone",
+      pageContent: "Utilisez notre simulateur pour estimer votre empreinte carbone lors de vos déplacements et trouvez des solutions pour la réduire !",
+      flightLegs: [{
+        origin: '',
+        destination: '',
         passengers: 1,
-        class: 'unknown',
-      },
-
-      flightLegs: [],
+        flightClass: 'unknown',
+      }],
       CO2Data: null,
       error: null,
     };
   },
   methods: {
     async calculateCO2() {
-      this.error = null; // Réinitialiser l'erreur à chaque nouvelle tentative
+  this.error = null;
+  try {
+    const apiKey = 'JS28545H3S4GCGGRN05CXRZGEF20';
+    const apiUrl = 'https://beta4.api.climatiq.io/travel/flights'; 
+    const requestData = {
+      legs: this.flightLegs.map(leg => ({
+        from: leg.origin,
+        to: leg.destination,
+        passengers: Number(leg.passengers),
+        class: leg.flightClass,
+      })),
+    };
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    });
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
+    }
+    const data = await response.json();
+    this.CO2Data = data;
+  } catch (error) {
+    console.error("Une erreur est survenue lors du calcul de l'empreinte carbone:", error);
+    this.error = "Une erreur est survenue. Veuillez réessayer.";
+  }
+},
 
-      try {
-        const apiKey = 'JS28545H3S4GCGGRN05CXRZGEF20';
-        const apiUrl = 'https://beta4.api.climatiq.io/travel/flights'; 
-
-        const requestData = {
-          legs: this.flightLegs,
-        };
-        
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
-        }
-
-        const data = await response.json();
-        this.CO2Data = data;
-
-      } catch (error) {
-        console.error('Une erreur est survenue lors du calcul de l\'empreinte carbone:', error);
-        this.error = 'Une erreur est survenue. Veuillez réessayer.';
-      }
-    },
-  
-    validateLeg() {
-      this.newLeg.from = this.origin;
-      this.newLeg.to = this.destination;
-      this.newLeg.passengers = this.passengers;
-      this.newLeg.class = this.flightClass;
-      console.log(this.newLeg);
-      this.flightLegs.push({ ...this.newLeg }); // Ajoute la ligne actuelle à flightLegs
-      console.log('Validé');
-      console.log(this.flightLegs);
-      this.newleg = [];
-    },
     removeFlightLeg(index) {
       this.flightLegs.splice(index, 1);
-    }
-}
-}
+    },
+    addNewLeg() {
+      this.flightLegs.push({
+        origin: '',
+        destination: '',
+        passengers: 1,
+        flightClass: 'unknown',
+      });
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 .error {
   color: red;
   margin: 10px 0;
+}
+.new-leg-form, .button-container {
+  gap: 10px; 
+}
+.button-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.calculate-button {
+  margin-top: 10px;
 }
 </style>
