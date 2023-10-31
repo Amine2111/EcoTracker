@@ -1,43 +1,45 @@
-// src/store/index.js
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
-const store = new Vuex.Store({
+export default createStore({
   state: {
-    user: null, // L'objet user sera null quand l'utilisateur n'est pas connecté
+    isAuthenticated: false,
+    user: null,
+  },
+  getters: {
+    isAuthenticated: state => state.isAuthenticated,
+    userName: state => state.user ? state.user.name : '',
   },
   mutations: {
-    setUser(state, user) {
-      state.user = user;
+    SET_AUTHENTICATED(state, isAuthenticated) {
+      state.isAuthenticated = isAuthenticated;
     },
-    signOut(state) {
-      state.user = null;
+    SET_USER(state, user) {
+      state.user = user;
     },
   },
   actions: {
-    async signIn({ commit }, { email }) {
-      try {
-        // Ici, vous pouvez ajouter votre logique de connexion à un backend ou à Firebase, etc.
-        // Pour l'exemple, je vais simplement simuler une connexion
-        const user = { email, name: 'John Doe' }; // Remplacez ceci par la réponse de votre serveur ou service d'authentification
-        commit('setUser', user);
-      } catch (error) {
-        console.error('Erreur lors de la connexion:', error);
-        throw error; // Renvoyez l'erreur pour la gérer dans votre composant
+    signIn({ commit }, payload) {
+
+      // Simuler la réponse du serveur
+      const serverResponse = {
+        success: true,
+        user: {
+          name: payload.name,
+          email: payload.email,
+          
+        },
+      };
+
+      if (serverResponse.success) {
+        commit('SET_AUTHENTICATED', true);
+        commit('SET_USER', serverResponse.user);
+      } else {
+        console.error('Échec de la connexion');
       }
     },
     signOut({ commit }) {
-      commit('signOut');
-    },
-  },
-  
-  getters: {
-    isAuthenticated(state) {
-      return !!state.user;
-    },
-    userName(state) {
-      return state.user ? state.user.name : '';
+      commit('SET_AUTHENTICATED', false);
+      commit('SET_USER', null);
     },
   },
 });
-
-export default store;

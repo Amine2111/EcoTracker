@@ -1,65 +1,45 @@
 <template>
-  <div>
-    <h1>{{ isSignUp ? 'Inscription' : 'Connexion' }}</h1>
-    <p>{{ isSignUp ? 'Créez un nouveau compte.' : 'Connectez-vous à votre compte.' }}</p>
-    
-    <form @submit.prevent="submitForm" v-if="isSignUp">
-      <!-- Champs pour l'inscription -->
-      <input type="text" placeholder="Nom" required>
-      <input type="text" placeholder="Prénom" required>
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Mot de passe" required>
-      <button type="submit">S'inscrire</button>
-      <GoogleLogin :callback="onGoogleSignIn"/>
-    </form>
+  <div v-if="isAuthenticated">
+    <button @click="logout">Déconnexion</button>
+    <h2>Le nom est : {{ userName }}</h2>
+  </div>
+  <div v-else>
+    <h1>Connexion</h1>
+    <p>Connectez-vous à votre compte.</p>
 
-    <form @submit.prevent="submitForm" v-else>
-      <!-- Champs pour la connexion -->
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Mot de passe" required>
-      <button type="submit">Se connecter</button>
-      <GoogleLogin :callback="onGoogleSignIn"/>
-    </form>
-
-    
-
-    <p v-if="isSignUp">
-      Vous avez déjà un compte ? <a @click="toggleForm">Cliquez ici</a>
-    </p>
-    <p v-else>
-      Vous n'avez pas de compte ? <a @click="toggleForm">Inscrivez-vous ici</a>
-    </p>
+    <GoogleLogin :callback="onGoogleSignIn"/>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { decodeCredential } from 'vue3-google-login';
+
 export default {
-  
   data() {
     return {
-      isSignUp: true,
+      email: '',
+      password: '',
+      name: '',
     };
   },
   methods: {
-    toggleForm() {
-      this.isSignUp = !this.isSignUp;
+    async onGoogleSignIn(googleUser) {
+      try {
+        const credential = decodeCredential(googleUser.credential);
+        await this.$store.dispatch('signIn', { name: credential.name, email: credential.email });
+      } catch (error) {
+        console.error('Erreur lors de la connexion avec Google', error);
+      }
     },
-    submitForm() {
-    if (this.isSignUp) {
-      console.log('Soumission du formulaire d\'inscription');
-      this.$store.dispatch('signIn', { firstName: 'Prénom', lastName: 'Nom' });
-    } else {
-      console.log('Soumission du formulaire de connexion');
-      this.$store.dispatch('signIn', { firstName: 'Prénom', lastName: 'Nom' });
+    async logout() {
+      await this.$store.dispatch('signOut');
     }
   },
-  onGoogleSignIn(googleUser) {
-    const profile = googleUser.getBasicProfile();
-    this.$store.dispatch('signIn', { firstName: profile.getGivenName(), lastName: profile.getFamilyName() });
+  computed: {
+    ...mapGetters(['isAuthenticated', 'userName']),
   },
-},
 };
-
 </script>
 
 <style scoped>
@@ -68,38 +48,18 @@ div {
   margin: 0 auto;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input, button {
-  padding: 8px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 button {
   cursor: pointer;
   background-color: #4CAF50;
   color: white;
+  padding: 15px 20px;
+  margin: 10px 0;
   border: none;
   border-radius: 4px;
+  font-size: 16px;
 }
 
 button:hover {
   background-color: #45a049;
-}
-
-p {
-  margin-top: 20px;
-  text-align: center;
-}
-
-a {
-  color: #42b983;
-  cursor: pointer;
 }
 </style>
