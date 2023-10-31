@@ -9,8 +9,9 @@
       <h3>Émissions par trajet :</h3>
       <ul>
         <li v-for="(leg, index) in CO2Data.legs" :key="'co2-leg-' + index">
-          <p>Leg {{ index + 1 }} : {{ leg.co2e }} {{ leg.co2e_unit }}</p>
-          <li v-for="(wttLeg, index) in CO2Data.wtt_legs" :key="index">
+        <p>Leg {{ index + 1 }} : {{ leg.co2e }} {{ leg.co2e_unit }}</p>
+        </li>
+        <li v-for="(wttLeg, index) in CO2Data.wtt_legs" :key="index">
         <p>WTT Leg {{ index + 1 }} - CO2e: {{ wttLeg.co2e }} {{ wttLeg.co2e_unit }}</p>
         </li>
       </ul>
@@ -36,8 +37,10 @@
         <button type="button" @click="removeFlightLeg(index)">Supprimer cette étape</button>
       </div>
       
+      <div class="button-container">
       <button type="button" @click="addNewLeg">Ajouter une étape</button>
       <button type="submit">Calculer le CO2</button>
+    </div>
     </form>
   </div>
 </template>
@@ -113,14 +116,23 @@ export default {
   color: red;
   margin: 10px 0;
 }
-.new-leg-form, .button-container {
+.new-leg-form {
   gap: 10px; 
 }
-.button-container {
+.button-container{
+  gap: 10px; 
   margin-top: 10px;
   margin-bottom: 10px;
+  align-items: left;
 }
-.calculate-button {
+
+.calculate-button{
   margin-top: 10px;
+}
+.button{
+  gap: 10px; 
+  margin-top: 10px;
+  margin-bottom: 10px;
+
 }
 </style>

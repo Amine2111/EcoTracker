@@ -28,7 +28,7 @@
   
   .home-page .btn {
     display: inline-block;
-    background-color: #3498db;
+    background-color: #FFF;
     color: #fff;
     padding: 10px 20px;
     margin: 0 10px;

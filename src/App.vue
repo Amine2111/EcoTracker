@@ -40,7 +40,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px 50px;
-  background-color: #2c3e50;
+  background-color: #2b8746;
 }
 
 .logo {
