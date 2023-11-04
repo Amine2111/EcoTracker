@@ -89,6 +89,8 @@ export default {
     }
     const data = await response.json();
     this.CO2Data = data;
+
+    await this.$store.dispatch('saveCO2Data', this.CO2Data);
   } catch (error) {
     console.error("Une erreur est survenue lors du calcul de l'empreinte carbone:", error);
     this.error = "Une erreur est survenue. Veuillez réessayer.";
