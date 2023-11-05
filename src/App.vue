@@ -4,7 +4,7 @@
       <img class="logo" alt="Vue logo" src="./assets/logo.png">
       <router-link to="/about" class="nav-link">À Propos de Nous</router-link>
       <router-link :to="{ name: 'Calcul' }">Calculateur</router-link>
-      <router-link to="/inscription" class="nav-link">Inscription</router-link>
+      <router-link to="/inscription" class="nav-link">Espace Personnel</router-link>
       <router-link v-if="isAuthenticated" :to="{ name: 'Calcul' }" class="nav-link">{{ userName }}</router-link>
     </nav>
     <router-view></router-view>

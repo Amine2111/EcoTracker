@@ -5,6 +5,7 @@ export default createStore({
     isAuthenticated: false,
     user: null,
     CO2EmissionsData: {}, // stocker les données des émissions CO2 par utilisateur
+    userTravelHistory: {},
   },
   getters: {
     isAuthenticated: (state) => state.isAuthenticated,
@@ -24,7 +25,16 @@ export default createStore({
         state.CO2EmissionsData[email] = co2Data;
       }
     },
+    ADD_TRAVEL_LEG(state, { email, travelLeg }) {
+      if (state.isAuthenticated && email) {
+        if (!state.userTravelHistory[email]) {
+          state.userTravelHistory[email] = [];
+        }
+        state.userTravelHistory[email].push(travelLeg);
+      }
+    },
   },
+  
   actions: {
     signIn({ commit }, payload) {
       // Simuler la réponse du serveur

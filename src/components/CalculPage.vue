@@ -91,6 +91,17 @@ export default {
     this.CO2Data = data;
 
     await this.$store.dispatch('saveCO2Data', this.CO2Data);
+    this.flightLegs.forEach((leg) => {
+        this.$store.commit('ADD_TRAVEL_LEG', {
+          email: this.$store.state.user.email,
+          travelLeg: {
+            origin: leg.origin,
+            destination: leg.destination,
+            co2e: data.co2e,
+            co2e_unit: data.co2e_unit, 
+          },
+        });
+      });
   } catch (error) {
     console.error("Une erreur est survenue lors du calcul de l'empreinte carbone:", error);
     this.error = "Une erreur est survenue. Veuillez réessayer.";
